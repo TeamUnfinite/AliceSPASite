@@ -1,0 +1,90 @@
+<html>
+<head>
+    <title>AliceSPA</title>
+    <link rel="shortcut icon" href="/images/logo.png" >
+    <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/master/dist/css/bootstrap.min.css" type="text/css" />
+    <script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?autoload=true&skin=sunburst"></script>
+</head>
+<body style="font-size:17px;">
+<div style="text-align:center;background:#eeeeee;padding-bottom:1em;padding-top:4em;">
+    <img src="/images/logo.png" style="width: 22em;">
+    <span style="display:inline-table">
+        <img src="/images/BSPText.jpg">
+        <p>
+        <a class="btn btn-lg" style="border: solid;" href="https://github.com/TeamUnfinite/AliceSPA" target="blank" >AliceSPA on Github</a>
+    </span>
+</div>
+<div style="background:#fefece;padding-bottom:1em;">
+    <div class="container" style="text-align:center;">
+        <h1 style="font-size:3em;">What is AliceSPA?</h1>
+        AliceSPA is an framework for building beautiful, simple and powerful single page applications. A backend server and a frontend client have been implemented with some basic functions, such as account system, role authentication, captcha, direct database accessing. AliceSPA have a protocol for communications between server and client, and do every thing quiet. There are also some extensions of AngularJS for quickly developing your application. Some knowledge of basic libraries is required. Slime framework and medoo are used in backend, AngularJS 1.x is used in client.
+        <p>
+        <div class="row" style="text-align: initial;">
+            <div class="col-sm-12">
+                <pre class="prettyprint">
+//Server PHP
+utils::secureRoute(
+        $app->post('/api/product','\Your\NameSpace\ProductController:handle'),//Register your API url and set a method to handle it.
+        ['productManager','admin'],//Current user must have these roles.
+        'image',//Current request must have correct image captcha.
+        ['product' => ['select','update','delete','insert']]//Client can directly access specified database table and actions under this API.
+    );
+                </pre>
+            </div>
+            <div class="col-sm-12">
+                <pre class="prettyprint">
+//Client JavaScript
+angular.ASPAModule('app',['AliceSPA'])//AliceSPA extend AngularJS with new features.
+.run(['ASPADirectDatabaseService','ASPAAPIProtocolService','ASPADirectiveHandleService',function(ASPADirectDatabaseService,ASPAAPIProtocolService,ASPADirectiveHandleService){//Inject AliceSPA services.
+    ASPADirectDatabaseService.select('/api/product','product','*',{'create_date[>]':'2016-09-04 15:36:00'})//SELECT * FROM product WHERE create_date > "2016-09-04 15:36:00"
+    .then(
+        function(successData){
+        },
+        function(failureErrors){
+        }
+    );
+
+    var imageCaptchaId = ASPADirectiveHandleService.getASPACaptchaImageHandle('myHandle').id;//Get handle with dynamic generated method.
+    var options = ASPAAPIProtocolService.makeImageCaptchaOptions(null,imageCaptchaId,'captchaCode');//Fill in addons.
+    ASPAAPIProtocolService.post('/api/product/add',{'name':'productName','price':23},null,options).then(//Send request and AliceSPA will check roles and captcha.
+        function(successData){
+        },
+        function(failureErrors){
+        }
+    );
+}]);
+                </pre>
+            </div>
+            <div class="col-sm-12">
+                <pre class="prettyprint" id="htmlCode">
+<aspa-captcha-image aspa-handle="myHandle"></aspa-captcha-image>
+                </pre>
+                <script>//<![CDATA[
+                    (function () {
+
+                      document.getElementById("htmlCode").innerHTML = '<!--Client HTML-->\n<aspa-captcha-image aspa-handle="myHandle"></aspa-captcha-image>'.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    })();
+                    //]]>
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="background:#eeeeee; padding-bottom:1em;">
+    <div class="container" style="text-align:center;">
+        <h1 style="font-size:3em;">Contributors</h1>
+        <div class="row">
+            <div class="col-sm-3">
+                <h3>ruojianll</h3>
+                <div>E-MAIL: <a href="mailto:ruojianll@gmail.com">ruojianll@gmail.com</a></div>
+                <div>E-MAIL: <a href="mailto:972372527@qq.com">972372527@qq.com</a></div>
+            </div>
+            <div class="col-sm-3">
+                <h3>MengXiangXiX</h3>
+                <div>E-MAIL: <a href="mailto:1528219692@qq.com">1528219692@qq.com</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
